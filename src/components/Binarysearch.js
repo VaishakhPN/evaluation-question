@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
+import { setArray, setTarget, setResult } from '../binarySearchSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 const Binarysearch = () => {
-  const [array, setArray] = useState('');
-  const [target, setTarget] = useState('');
-  const [result, setResult] = useState(-1);
-  const [visualArray, setVisualArray] = useState([]);
 
+  const dispatch = useDispatch();
+  const { array, target, result, visualArray } = useSelector((state) => state.binarySearch);
   const binarySearch = (arr, target) => {
     let left = 0;
     let right = arr.length - 1;
@@ -26,14 +26,13 @@ const Binarysearch = () => {
   };
 
   const handleArrayChange = (e) => {
-    const newArray = e.target.value.split(',').map(Number).sort((a, b) => a - b);
-    setArray(e.target.value);
-    setVisualArray(newArray);
+    const newArray = e.target.value;
+    dispatch(setArray(newArray));
   };
 
   const handleSearch = () => {
     const targetIndex = binarySearch(visualArray, parseInt(target));
-    setResult(targetIndex);
+    dispatch(setResult(targetIndex));
   };
 
   return (
@@ -54,7 +53,7 @@ const Binarysearch = () => {
         <input
           type='text'
           value={target}
-          onChange={(e) => setTarget(e.target.value)}
+          onChange={(e) => dispatch(setTarget(e.target.value))}
         />
       </label>
       <br />
@@ -87,3 +86,4 @@ const Binarysearch = () => {
 };
 
 export default Binarysearch;
+

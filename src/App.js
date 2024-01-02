@@ -1,10 +1,12 @@
 import Binarysearch from "./components/Binarysearch.js";
-
+import { Provider } from 'react-redux';
+import store from './store';
 function App() {
   return (
     <>
-    <Binarysearch></Binarysearch>
-    </>
+  <Provider store={store}>
+    <Binarysearch />
+  </Provider>    </>
   );
 }
 
