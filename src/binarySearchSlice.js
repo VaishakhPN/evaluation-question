@@ -7,6 +7,7 @@ const binarySearchSlice = createSlice({
     target: '',
     result: -1,
     visualArray: [],
+    time:null,
   },
   reducers: {
     setArray: (state, action) => {
@@ -20,10 +21,13 @@ const binarySearchSlice = createSlice({
     setResult: (state, action) => {
       state.result = action.payload;
     },
+    setTime: (state, action) => {
+      state.time = action.payload;
+    },
   },
 });
 
-export const { setArray, setTarget, setResult } = binarySearchSlice.actions;
+export const { setArray, setTarget, setResult, setTime } = binarySearchSlice.actions;
 
 export default binarySearchSlice.reducer;
 

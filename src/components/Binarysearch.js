@@ -1,29 +1,11 @@
 import React, { useState } from 'react';
-import { setArray, setTarget, setResult } from '../binarySearchSlice';
+import { setArray, setTarget, setResult, setTime } from '../binarySearchSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import VisualArrayDisplay from './VisualArrayDisplay';
 
-const Binarysearch = () => {
-
+const BinarySearch = () => {
   const dispatch = useDispatch();
-  const { array, target, result, visualArray } = useSelector((state) => state.binarySearch);
-  const binarySearch = (arr, target) => {
-    let left = 0;
-    let right = arr.length - 1;
-
-    while (left <= right) {
-      const middle = Math.floor((left + right) / 2);
-
-      if (arr[middle] === target) {
-        return middle;
-      } else if (target < arr[middle]) {
-        right = middle - 1;
-      } else {
-        left = middle + 1;
-      }
-    }
-
-    return -1;
-  };
+  const { array, target, result, visualArray, time } = useSelector((state) => state.binarySearch);
 
   const handleArrayChange = (e) => {
     const newArray = e.target.value;
@@ -33,6 +15,32 @@ const Binarysearch = () => {
   const handleSearch = () => {
     const targetIndex = binarySearch(visualArray, parseInt(target));
     dispatch(setResult(targetIndex));
+  };
+
+  const binarySearch = (arr, target) => {
+    let left = 0;
+    let right = arr.length - 1;
+
+    const start = performance.now();
+
+    while (left <= right) {
+      const middle = Math.floor((left + right) / 2);
+
+      if (arr[middle] === target) {
+        const end = performance.now();
+        const timeDiff = (end - start).toFixed(2);
+        console.log(timeDiff);
+        dispatch(setTime(timeDiff));
+        return middle;
+      } else if (target < arr[middle]) {
+        right = middle - 1;
+      } else {
+        left = middle + 1;
+      }
+    }
+
+    const end = performance.now();
+    return -1;
   };
 
   return (
@@ -60,30 +68,10 @@ const Binarysearch = () => {
       <br />
       <button onClick={handleSearch}>Search</button>
       <h3>Result: {result !== -1 ? `Found at index ${result}` : 'Not found'}</h3>
-
-      <div style={{ maxHeight: '200px', display: 'flex', flexWrap: 'wrap' }}>
-        {visualArray.map((element, index) => (
-          <div
-            key={index}
-            style={{
-              border: '1px solid #000',
-              padding: '8px',
-              margin: '4px',
-              backgroundColor: index === result ? 'yellow' : 'white',
-              width: '20px', 
-              height: '20px',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            {element}
-          </div>
-        ))}
-      </div>
+      <h3>Time: {time} milliseconds</h3>
+      <VisualArrayDisplay visualArray={visualArray} result={result} />
     </div>
   );
 };
 
-export default Binarysearch;
-
+export default BinarySearch;
